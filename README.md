@@ -22,7 +22,7 @@ This project implements a **dual-clock Asynchronous FIFO** for reliable data tra
 * `sync_w2r.v` – Write pointer synchronization to read clock domain
 * `testbench.v` – Functional verification
 ## Architecture
-![Architecture](documents/Asynch_architecture.jpeg)
+![Architecture](Documents/Asynch_architecture.jpeg)
 ## Tools
 
 **Verilog HDL | Vivado | Simulation | STA**
