@@ -1,102 +1,32 @@
-# 32-bit Pipelined RISC-V Processor
+# Asynchronous FIFO
 
 ## Overview
 
-A **32-bit RISC-V processor** designed and implemented in **Verilog HDL** using a **5-stage pipelined architecture**. The design supports instruction execution across **IF, ID, EX, MEM, and WB stages** and includes dedicated mechanisms to handle pipeline hazards and control-flow changes.
+This project implements a **dual-clock Asynchronous FIFO** for reliable data transfer between two different clock domains.
 
-The processor was designed and functionally verified using **Xilinx Vivado**.
+## Features
 
-## Key Features
+* Independent read and write clock domains
+* Gray-code pointer synchronization
+* Two-flip-flop synchronizers for CDC
+* Full and empty flag generation
+* Dual-port memory architecture
+* Robust metastability handling
 
-* **32-bit RISC-V pipelined processor**
-* **5-stage pipeline:** IF → ID → EX → MEM → WB
-* Modular RTL implementation in **Verilog HDL**
-* Instruction fetch, decode, execute, memory access, and write-back
-* Register file, ALU, Control Unit, Immediate Generator, Instruction Memory, and Data Memory
-* **Data Hazard Detection Unit**
-* **Load-use hazard handling through pipeline stalling**
-* **Data Forwarding / Bypassing Unit** to reduce pipeline stalls
-* **Branch Prediction mechanism** for improved control-flow handling
-* Pipeline flushing/recovery on branch misprediction
-* Functional verification using **Vivado Simulator**
+## Files
 
-## Major Enhancements
-
-### ⚡ Data Forwarding
-
-A forwarding unit detects data dependencies between pipeline stages and forwards the required result directly to the EX stage, reducing unnecessary stalls caused by **RAW (Read After Write) data hazards**.
-
-### 🚧 Hazard Detection Unit
-
-The hazard detection unit identifies dependencies, particularly **load-use hazards**, and inserts pipeline stalls when forwarding alone cannot resolve the dependency.
-
-### 🔀 Branch Prediction
-
-Branch prediction is incorporated to reduce control hazards and minimize pipeline performance loss caused by branch instructions. On an incorrect prediction, the pipeline is updated and incorrect instructions are flushed.
-
+* `fifo.v` – Top-level FIFO module
+* `wptr_full.v` – Write pointer and full detection
+* `rptr_empty.v` – Read pointer and empty detection
+* `sync_r2w.v` – Read pointer synchronization to write clock domain
+* `sync_w2r.v` – Write pointer synchronization to read clock domain
+* `testbench.v` – Functional verification
 ## Architecture
-![Architecture](documents/Risk-v%20Archiecture.jpeg)
-```text
-Instruction Fetch
-        │
-        ▼
- ┌─────────────┐
- │ IF / ID Reg │
- └──────┬──────┘
-        ▼
-Instruction Decode
-        │
-        ▼
- ┌─────────────┐
- │ ID / EX Reg │◄──── Hazard Detection
- └──────┬──────┘
-        ▼
-     Execute ◄──────── Data Forwarding
-        │
-        ▼
- ┌─────────────┐
- │ EX / MEM Reg│
- └──────┬──────┘
-        ▼
-   Memory Access
-        │
-        ▼
- ┌─────────────┐
- │ MEM / WB Reg│
- └──────┬──────┘
-        ▼
-     Write Back
-```
-![Instruction Set](documents/Instruction%20Set.jpeg)
-## Project Structure
+![Architecture](documents/Asynch_architecture.jpeg)
+## Tools
 
-```text
-RISC-V-Processor/
-├── rtl/                 # Verilog RTL modules
-├── tb/                  # Testbench 
-├── README.md
-└── .gitignore
-```
+**Verilog HDL | Vivado | Simulation | STA**
 
-## Tools Used
+## Result
 
-* **HDL:** Verilog
-* **EDA Tool:** Xilinx Vivado
-* **Simulation:** Vivado Simulator
-* **Version Control:** Git & GitHub
-
-## Verification
-
-The processor was functionally verified by simulating instruction execution and observing:
-
-* Pipeline stage operation
-* Register write-back
-* Data forwarding paths
-* Hazard detection and pipeline stalls
-* Branch handling and pipeline flushing
-* Branch prediction behavior
-
-## Author
-
-**T.kavya**
-M.Tech – ,Integrated circuits and systems, IIT Madras
+Successfully verified asynchronous data transfer between independent clock domains with correct **full** and **empty** flag operation.
